@@ -22,7 +22,7 @@ var claimSetTestVectors = []struct {
 			Expiration:         time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC),
 			NotBefore:          time.Date(2009, time.November, 11, 23, 0, 0, 0, time.UTC),
 			IssuedAt:           time.Date(2009, time.November, 12, 23, 0, 0, 0, time.UTC),
-			AdditionalClaimSet: map[string]interface{}{"a": 101, "b": []byte("blah")},
+			AdditionalClaims: map[string]interface{}{"a": 101, "b": []byte("blah")},
 		},
 		[]byte(`{"a":101,"aud":["AUD1","AUD2"],"b":"YmxhaA==","exp":1257894000,"iat":1258066800,"iss":"ISS-VALUE","jti":"JTI","nbf":1257980400,"sub":"SUB-VALUE"}`),
 	},
