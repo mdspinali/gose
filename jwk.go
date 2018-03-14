@@ -11,21 +11,17 @@ import (
 
 // Represents a type of JSON Web Key (JWK)
 // See https://tools.ietf.org/html/rfc7518#section-6.1 for more information
-type JwkType string
-
 const (
-	JwkTypeOct JwkType = "oct"
-	JwkTypeEC  JwkType = "EC"
-	JwkTypeRSA JwkType = "RSA"
+	KeyTypeOct string = "oct"
+	KeyTypeEC  string = "EC"
+	KeyTypeRSA string = "RSA"
 )
 
 // Identifies the use for JWK Public keys as specified in:
 // https://tools.ietf.org/html/rfc7517#section-4.2
-type KeyUse string
-
 const (
-	KeyUseSig KeyUse = "sig"
-	KeyUseEnc KeyUse = "enc"
+	KeyUseSig string = "sig"
+	KeyUseEnc string = "enc"
 )
 
 // Identifies the operation the JWK is inteneded for as specified in:
@@ -33,24 +29,24 @@ const (
 type KeyOperation string
 
 const (
-	KeyOpSign       KeyOperation = "sign"
-	KeyOpVerify     KeyOperation = "verify"
-	KeyOpEncrypt    KeyOperation = "encrypt"
-	KeyOpDecrypt    KeyOperation = "decrypt"
-	KeyOpWrapKey    KeyOperation = "wrapkey"
-	KeyOpUnwrapKey  KeyOperation = "unwrapkey"
-	KeyOpDeriveKey  KeyOperation = "derivekey"
-	KeyOpDeriveBits KeyOperation = "derivebits"
+	KeyOpSign       string = "sign"
+	KeyOpVerify     string = "verify"
+	KeyOpEncrypt    string = "encrypt"
+	KeyOpDecrypt    string = "decrypt"
+	KeyOpWrapKey    string = "wrapkey"
+	KeyOpUnwrapKey  string = "unwrapkey"
+	KeyOpDeriveKey  string = "derivekey"
+	KeyOpDeriveBits string = "derivebits"
 )
 
 // Jwk represents a JSON Web Key as specified in in:
 // https://tools.ietf.org/html/rfc7517
 type Jwk struct {
-	Type              JwkType
+	Type              string
 	Id                string
-	Algorithm         Jwa
-	Use               KeyUse
-	Operations        []KeyOperation
+	Algorithm         string
+	Use               string
+	Operations        []string
 	Curve             ec.Curve
 	X                 *big.Int
 	Y                 *big.Int
@@ -68,10 +64,10 @@ type Jwk struct {
 }
 
 // Returns a new JWK for the desired type. An error will be returned if an invalid type is passed
-func NewJwk(t JwkType) (j *Jwk, err error) {
-	switch t {
-	case JwkTypeOct, JwkTypeRSA, JwkTypeEC:
-		j = &Jwk{Type: t}
+func NewJwk(kty string) (j *Jwk, err error) {
+	switch kty {
+	case KeyTypeOct, KeyTypeRSA, KeyTypeEC:
+		j = &Jwk{Type: kty}
 	default:
 		err = errors.New("Key Type Invalid. Must be Oct, RSA or EC")
 	}
@@ -357,7 +353,7 @@ func (jwk *Jwk) MarshalJSON() (data []byte, err error) {
 	}
 
 	switch jwk.Type {
-	case JwkTypeEC:
+	case KeyTypeEC:
 		{
 			if jwk.Curve != nil {
 				jwk.Curve.Params()
@@ -397,7 +393,7 @@ func (jwk *Jwk) MarshalJSON() (data []byte, err error) {
 				}
 			}
 		}
-	case JwkTypeRSA:
+	case KeyTypeRSA:
 		{
 			if jwk.D != nil {
 				b64u := &Base64UrlUInt{UInt: jwk.D}
@@ -489,7 +485,7 @@ func (jwk *Jwk) MarshalJSON() (data []byte, err error) {
 				}
 			}
 		}
-	case JwkTypeOct:
+	case KeyTypeOct:
 		{
 			if len(jwk.KeyValue) > 0 {
 				b64o := &Base64UrlOctets{Octets: jwk.KeyValue}
@@ -525,29 +521,29 @@ func (jwk *Jwk) Validate() error {
 
 	// If the alg parameter is set, make sure it matches the set JWK Type
 	if len(jwk.Algorithm) > 0 {
-		algKeyType := jwk.Algorithm.GetJwkType()
+		algKeyType := GetKeyType(jwk.Algorithm)
 		if algKeyType != jwk.Type {
 			fmt.Errorf("Jwk Type (kty=%v) doesn't match the algorithm key type (%v)", jwk.Type, algKeyType)
 		}
 	}
 	switch jwk.Type {
-	case JwkTypeRSA:
+	case KeyTypeRSA:
 		if err := jwk.validateRSAParams(); err != nil {
 			return err
 		}
 
-	case JwkTypeEC:
+	case KeyTypeEC:
 		if err := jwk.validateECParams(); err != nil {
 			return err
 		}
 
-	case JwkTypeOct:
+	case KeyTypeOct:
 		if err := jwk.validateOctParams(); err != nil {
 			return err
 		}
 
 	default:
-		return errors.New("JwkType (kty) must be EC, RSA or Oct")
+		return errors.New("KeyType (kty) must be EC, RSA or Oct")
 	}
 
 	return nil

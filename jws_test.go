@@ -20,7 +20,7 @@ var jwsJSONGeneralTestVectors = []struct {
 			Signatures: []*JwsSignature{
 				&JwsSignature{
 					ProtectedHeader: &JwHeader{
-						Alg: JwsAlgRS256,
+						Algorithm: JwsAlgRS256,
 					},
 					UnprotectedHeader: &JwHeader{
 						KeyId: "2010-12-29",
@@ -40,7 +40,7 @@ var jwsJSONGeneralTestVectors = []struct {
 				},
 				&JwsSignature{
 					ProtectedHeader: &JwHeader{
-						Alg: JwsAlgES256,
+						Algorithm: JwsAlgES256,
 					},
 					UnprotectedHeader: &JwHeader{
 						KeyId: "e9bc097a-ce51-4036-9562-d2ade882db0d",
@@ -76,7 +76,7 @@ var jwsJSONFlatTestVectors = []struct {
 			Signatures: []*JwsSignature{
 				&JwsSignature{
 					ProtectedHeader: &JwHeader{
-						Alg: JwsAlgES256,
+						Algorithm: JwsAlgES256,
 					},
 					UnprotectedHeader: &JwHeader{
 						KeyId: "e9bc097a-ce51-4036-9562-d2ade882db0d",
@@ -106,8 +106,8 @@ var jwsCompactTestVectors = []struct {
 			Signatures: []*JwsSignature{
 				&JwsSignature{
 					ProtectedHeader: &JwHeader{
-						Alg:  JwsAlgHS256,
-						Type: "JWT",
+						Algorithm: JwsAlgHS256,
+						Type:      "JWT",
 					},
 					signature: []byte{116, 24, 223, 180, 151, 153, 224, 37, 79, 250, 96, 125, 216, 173, 187, 186, 22,
 						212, 37, 77, 105, 214, 191, 240, 91, 88, 5, 88, 83, 132, 141, 121},
@@ -123,7 +123,7 @@ var jwsCompactTestVectors = []struct {
 			Signatures: []*JwsSignature{
 				&JwsSignature{
 					ProtectedHeader: &JwHeader{
-						Alg: JwsAlgNone,
+						Algorithm: JwsAlgNone,
 					},
 				},
 			},
@@ -145,8 +145,8 @@ var jwsSigningTestVectors = []struct {
 			Signatures: []*JwsSignature{
 				&JwsSignature{
 					ProtectedHeader: &JwHeader{
-						Alg:  JwsAlgHS256,
-						Type: "JWT",
+						Algorithm: JwsAlgHS256,
+						Type:      "JWT",
 					},
 				},
 			},

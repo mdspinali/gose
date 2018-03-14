@@ -17,11 +17,11 @@ var jwkTestVectors = []struct {
 	{
 		"OCT Key",
 		&Jwk{
-			Type:              JwkTypeOct,
+			Type:              KeyTypeOct,
 			Id:                "KEY #1",
 			Algorithm:         JwsAlgHS256,
 			Use:               KeyUseSig,
-			Operations:        []KeyOperation{KeyOpSign},
+			Operations:        []string{KeyOpSign},
 			KeyValue:          []byte("this my symmettric key"),
 			AdditionalMembers: map[string]interface{}{"a": 101, "b": "blah"},
 		},
@@ -30,11 +30,11 @@ var jwkTestVectors = []struct {
 	{
 		"EC Key",
 		&Jwk{
-			Type:              JwkTypeEC,
+			Type:              KeyTypeEC,
 			Id:                "KEY #2",
 			Algorithm:         JwsAlgES384,
 			Use:               KeyUseSig,
-			Operations:        []KeyOperation{KeyOpSign},
+			Operations:        []string{KeyOpSign},
 			X:                 big.NewInt(int64(10333)),
 			Y:                 big.NewInt(int64(10334)),
 			D:                 big.NewInt(int64(10335)),
@@ -46,11 +46,11 @@ var jwkTestVectors = []struct {
 	{
 		"RSA Key",
 		&Jwk{
-			Type:       JwkTypeRSA,
+			Type:       KeyTypeRSA,
 			Id:         "KEY #3",
 			Algorithm:  JwsAlgPS512,
 			Use:        KeyUseSig,
-			Operations: []KeyOperation{KeyOpSign},
+			Operations: []string{KeyOpSign},
 			N:          big.NewInt(int64(10333)),
 			E:          25,
 			D:          big.NewInt(int64(10335)),

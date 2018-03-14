@@ -50,7 +50,7 @@ type ECPoint struct {
 }
 
 // Returnes a signer a particular JWS Algorithm. An error is returned for an invalid algorithm.
-func NewJwaSigner(jwsAlg Jwa) (JwaSigner, error) {
+func NewJwaSigner(jwsAlg string) (JwaSigner, error) {
 	switch jwsAlg {
 	case JwsAlgHS256:
 		return &HSSigner{H: crypto.SHA256}, nil

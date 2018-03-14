@@ -6,8 +6,8 @@ import (
 
 // The JSON Web header used by JWE and JWS
 type JwHeader struct {
-	Alg                  Jwa
-	EncryptionAlg        Jwa
+	Algorithm            string
+	EncryptionAlg        string
 	Compression          string
 	JwkUrl               string
 	Jwk                  *Jwk
@@ -38,7 +38,7 @@ func (h *JwHeader) UnmarshalJSON(data []byte) error {
 	// Check if each member of the Claims struct is present in the obj map. If it is,
 	// then attempt to unmarshal that member. Then, delete the member from obj
 	if v, ok := obj["alg"]; ok {
-		err = json.Unmarshal(v, &h.Alg)
+		err = json.Unmarshal(v, &h.Algorithm)
 		if err != nil {
 			return err
 		}
@@ -198,8 +198,8 @@ func (h *JwHeader) MarshalJSON() ([]byte, error) {
 	// Individually marshal each member
 	obj := make(map[string]*json.RawMessage, len(h.AdditionalMembers)+7)
 
-	if len(h.Alg) > 0 {
-		if bytes, err := json.Marshal(h.Alg); err == nil {
+	if len(h.Algorithm) > 0 {
+		if bytes, err := json.Marshal(h.Algorithm); err == nil {
 			rm := json.RawMessage(bytes)
 			obj["alg"] = &rm
 		} else {

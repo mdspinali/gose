@@ -15,9 +15,9 @@ type JwkSet struct {
 // This function is useful for keys of different types that may have the same key id.
 // The desired JWk and whethere or not the JWK exists (boolean) is returned
 // https://tools.ietf.org/html/rfc7517#section-4.5
-func (jwks *JwkSet) GetKeyByIdAndType(id string, typ JwkType) *Jwk {
+func (jwks *JwkSet) GetKeyByIdAndType(id string, kty string) *Jwk {
 	for _, v := range jwks.Keys {
-		if v.Type == typ {
+		if v.Type == kty {
 			// Remove whitespace and do case-sensitive match. Jwk spec specifies Key ID to be
 			// case sensitive
 			if strings.TrimSpace(v.Id) == strings.TrimSpace(id) {

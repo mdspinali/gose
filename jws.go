@@ -142,15 +142,15 @@ func (jSig *JwsSignature) Sign(jws *Jws, jwk *Jwk) error {
 
 // Attempts to determine the signing algorithm for a Jws Signature. This may be in the unprotected header or the protected header
 // depending on the end-user's implementation. An error is returned if there are conflicts, or no Alg
-func (jSig *JwsSignature) GetAlg() (Jwa, error) {
-	algProt := Jwa("")
-	algUnProt := Jwa("")
+func (jSig *JwsSignature) GetAlg() (string, error) {
+	var algProt string
+	var algUnProt string
 
 	if jSig.ProtectedHeader != nil {
-		algProt = jSig.ProtectedHeader.Alg
+		algProt = jSig.ProtectedHeader.Algorithm
 	}
 	if jSig.UnprotectedHeader != nil {
-		algUnProt = jSig.UnprotectedHeader.Alg
+		algUnProt = jSig.UnprotectedHeader.Algorithm
 	}
 
 	if algProt == "" {
@@ -158,14 +158,14 @@ func (jSig *JwsSignature) GetAlg() (Jwa, error) {
 			return "", errors.New("No algorithm (alg) found in protected or unprotected header")
 		} else if algProt != algUnProt {
 			return "", errors.New("Two non-matching algorithm (alg) parameters found in unprotected and protected header")
-		} else if !algUnProt.IsValidJwsAlg() {
+		} else if !IsValidJwsAlg(algUnProt) {
 			return "", errors.New("Unprotected header algorithm (alg) is not valid")
 		}
 		return algUnProt, nil
 	} else {
 		if algUnProt != "" && algProt != algUnProt {
 			return "", errors.New("Two non-matching algorithm (alg) parameters found in unprotected and protected header")
-		} else if !algProt.IsValidJwsAlg() {
+		} else if !IsValidJwsAlg(algProt) {
 			return "", errors.New("protected header algorithm (alg) is not valid")
 		}
 		return algProt, nil

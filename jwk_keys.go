@@ -34,7 +34,7 @@ func (jwk *Jwk) ImportKey(k interface{}) error {
 			return errors.New("String is empty!")
 		} else {
 			jwk.ClearTypeParams()
-			jwk.Type = JwkTypeOct
+			jwk.Type = KeyTypeOct
 			jwk.KeyValue = []byte(v)
 		}
 	case []byte:
@@ -42,7 +42,7 @@ func (jwk *Jwk) ImportKey(k interface{}) error {
 			return errors.New("Byte array is empty!")
 		} else {
 			jwk.ClearTypeParams()
-			jwk.Type = JwkTypeOct
+			jwk.Type = KeyTypeOct
 			jwk.KeyValue = v
 		}
 	default:
@@ -103,7 +103,7 @@ func (jwk *Jwk) RsaPrivKey() *rsa.PrivateKey {
 
 func (jwk *Jwk) importEcdsaPubKey(k *ecdsa.PublicKey) {
 	jwk.ClearTypeParams()
-	jwk.Type = JwkTypeEC
+	jwk.Type = KeyTypeEC
 
 	jwk.Curve = k.Curve
 	jwk.X = k.X
@@ -112,7 +112,7 @@ func (jwk *Jwk) importEcdsaPubKey(k *ecdsa.PublicKey) {
 
 func (jwk *Jwk) importEcdsaPrivKey(k *ecdsa.PrivateKey) {
 	jwk.ClearTypeParams()
-	jwk.Type = JwkTypeEC
+	jwk.Type = KeyTypeEC
 
 	jwk.importEcdsaPubKey(&(k.PublicKey))
 	jwk.D = k.D
@@ -120,7 +120,7 @@ func (jwk *Jwk) importEcdsaPrivKey(k *ecdsa.PrivateKey) {
 
 func (jwk *Jwk) importRsaPubKey(k *rsa.PublicKey) {
 	jwk.ClearTypeParams()
-	jwk.Type = JwkTypeRSA
+	jwk.Type = KeyTypeRSA
 
 	jwk.N = k.N
 	jwk.E = k.E
@@ -128,7 +128,7 @@ func (jwk *Jwk) importRsaPubKey(k *rsa.PublicKey) {
 
 func (jwk *Jwk) importRsaPrivKey(k *rsa.PrivateKey) {
 	jwk.ClearTypeParams()
-	jwk.Type = JwkTypeRSA
+	jwk.Type = KeyTypeRSA
 
 	jwk.importRsaPubKey(&(k.PublicKey))
 	jwk.D = jwk.D
