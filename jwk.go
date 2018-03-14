@@ -33,14 +33,14 @@ const (
 type KeyOperation string
 
 const (
-	KeyOperationSign KeyOperation = "sign"
-	KeyOpVerify      KeyOperation = "verify"
-	KeyOpEncrypt     KeyOperation = "encrypt"
-	KeyOpDecrypt     KeyOperation = "decrypt"
-	KeyOpWrapKey     KeyOperation = "wrapkey"
-	KeyOpUnwrapKey   KeyOperation = "unwrapkey"
-	KeyOpDeriveKey   KeyOperation = "derivekey"
-	KeyOpDeriveBits  KeyOperation = "derivebits"
+	KeyOpSign       KeyOperation = "sign"
+	KeyOpVerify     KeyOperation = "verify"
+	KeyOpEncrypt    KeyOperation = "encrypt"
+	KeyOpDecrypt    KeyOperation = "decrypt"
+	KeyOpWrapKey    KeyOperation = "wrapkey"
+	KeyOpUnwrapKey  KeyOperation = "unwrapkey"
+	KeyOpDeriveKey  KeyOperation = "derivekey"
+	KeyOpDeriveBits KeyOperation = "derivebits"
 )
 
 // Jwk represents a JSON Web Key as specified in in:
@@ -50,7 +50,7 @@ type Jwk struct {
 	Id                string
 	Algorithm         Jwa
 	Use               KeyUse
-	Operations        KeyOperation
+	Operations        []KeyOperation
 	Curve             ec.Curve
 	X                 *big.Int
 	Y                 *big.Int

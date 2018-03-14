@@ -2,22 +2,22 @@ package gose
 
 import (
 	"encoding/json"
-	"time"
-	"fmt"
-	"strings"
 	"errors"
+	"fmt"
 	"reflect"
+	"strings"
+	"time"
 )
 
 // Represents a JWT Claim Set as specified in https://tools.ietf.org/html/rfc7519
 type ClaimSet struct {
-	Issuer             string                 `json:"iss,omitempty"`
-	Subject            string                 `json:"sub,omitempty"`
-	Audience           []string               `json:"aud,omitempty"`
-	Id                 string                 `json:"jti,omitempty"`
-	Expiration         time.Time              `json:"exp,omitempty"`
-	NotBefore          time.Time              `json:"nbf,omitempty"`
-	IssuedAt           time.Time              `json:"iat,omitempty"`
+	Issuer           string                 `json:"iss,omitempty"`
+	Subject          string                 `json:"sub,omitempty"`
+	Audience         []string               `json:"aud,omitempty"`
+	Id               string                 `json:"jti,omitempty"`
+	Expiration       time.Time              `json:"exp,omitempty"`
+	NotBefore        time.Time              `json:"nbf,omitempty"`
+	IssuedAt         time.Time              `json:"iat,omitempty"`
 	AdditionalClaims map[string]interface{} `json:"-"`
 }
 
@@ -231,9 +231,11 @@ func (c *ClaimSet) Validate(ref *ClaimSet) error {
 	}
 
 	if ref.Audience != nil {
-		if err := c.ValidateAud(ref.Audience); err != nil {
-			errStr := fmt.Sprintf("[Aud]- Validation failed: %s", err.Error())
-			errStrings = append(errStrings, errStr)
+		for i, aud := range ref.Audience {
+			if err := c.ValidateAud(aud); err != nil {
+				errStr := fmt.Sprintf("[Aud %d]- Validation failed: %s", i, err.Error())
+				errStrings = append(errStrings, errStr)
+			}
 		}
 	}
 
@@ -270,17 +272,12 @@ func (c *ClaimSet) ValidateSub(sub string) error {
 	return nil
 }
 
-func (c *ClaimSet) ValidateAud(aud []string) error {
-	audMap := make(map[string]string)
+func (c *ClaimSet) ValidateAud(refAud string) error {
+	refAud = strings.TrimSpace(refAud)
 	for _, v := range c.Audience {
-		audMap[strings.TrimSpace(v)] = ""
-	}
-	for _, rv := range aud {
-		v, ok := audMap[strings.TrimSpace(rv)]
-		if !ok {
-			return fmt.Errorf("Aud Value: %v, doesn't exist in claimset", rv)
-		} else if v != rv {
-			return fmt.Errorf("Aud Value: %v, doesn't match reference AUD value: %v", v, rv)
+		aud := strings.TrimSpace(v)
+		if aud != refAud {
+			return fmt.Errorf("Aud Value: %v, doesn't match reference AUD value: %v", aud, refAud)
 		}
 	}
 
